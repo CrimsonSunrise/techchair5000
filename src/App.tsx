@@ -3,8 +3,7 @@ import './App.css';
 
 function App() {
 	
-	const [nomeCadeira, setNomeCadeira] = useState('Tech Chair 5000')
-	
+	const [nomeCadeira, setNomeCadeira] = useState('')
 	const [backColor, setBackColor] = useState('0');
 	const [coachColor, setCoachColor] = useState('0');
 	const [frontColor, setFrontColor] = useState('0');
@@ -41,6 +40,7 @@ function App() {
 	}
 	
 	useEffect(() => {
+		setNomeCadeira("Tech Chair 5000")
 		changeThemes('0', '0', '0', '0');
 		if(newsletterCadastro) {
 			setRegistered(true)
