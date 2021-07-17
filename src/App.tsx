@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import './App.css';
 
 function App() {
 	
-	const [nome, setNome] = useState('Tech Chair 5000')
+	const [nomeCadeira, setNomeCadeira] = useState('Tech Chair 5000')
 	
 	const [backColor, setBackColor] = useState('0');
 	const [coachColor, setCoachColor] = useState('0');
@@ -12,6 +12,11 @@ function App() {
 	const [backValue, setBackValue] = useState(0);
 	const [coachValue, setCoachValue] = useState(0);
 	const [neonValue, setNeonValue] = useState(0);
+	const [registered, setRegistered] = useState(false);
+	const nome = useRef(null);
+	const email = useRef(null);
+	
+	const newsletterCadastro = window.localStorage.getItem("newsletterEmail")
 	
 	function changeThemes(back: any, coach: any, front: any, neon: any) {
 		
@@ -37,8 +42,50 @@ function App() {
 	
 	useEffect(() => {
 		changeThemes('0', '0', '0', '0');
-		
+		if(newsletterCadastro) {
+			setRegistered(true)
+		} else {
+			setRegistered(false)
+		}
 	}, [])
+	
+	const Registrado = () => {
+		return (
+			<>
+				<h1>Seu email foi cadastrado!</h1>
+				<h2>Em breve você receberá novidades sobre a <b>{nomeCadeira}</b> e nossos outros produtos!</h2>
+			</>
+		)
+	}
+	
+	const NaoRegistrado = () => {
+		return (
+			<>
+				<h1>Vai ficar de fora dessa?</h1>
+				<h2>Cadastre o seu email abaixo para ficar sabendo quando a <b>{nomeCadeira}</b> estará disponível!</h2>
+				
+				<div className="newsLetter">
+					
+					<input ref={nome} id="nome" type="text" placeholder="Nome" ></input>
+					<input ref={email} id="email" type="text" placeholder="Email"></input>
+					<div className="button" onClick={() => { cadastrar() }}>CADASTRAR</div>
+					
+				</div>
+			</>
+		)
+	}
+	
+	function cadastrar() {
+		// Fingimos que foi verificado o email e nome...
+		// @ts-ignore: Object is possibly 'null'.
+		const n = nome.current.value
+		// @ts-ignore: Object is possibly 'null'.
+		const e = email.current.value
+		if(n && e) {
+			setRegistered(true);
+			window.localStorage.setItem("newsletterEmail", e)
+		}
+	}
 	
 	return (
 		<div className="App">
@@ -47,7 +94,7 @@ function App() {
 				
 				<div className="topLeft">
 					<h1><span>Dormir</span> nunca foi tão produtivo!</h1>
-					<h2>Conheça a <b>{nome}</b>, sua oportunidade de fazer todas as tarefas do dia. DORMINDO!</h2>
+					<h2>Conheça a <b>{nomeCadeira}</b>, sua oportunidade de fazer todas as tarefas do dia. DORMINDO!</h2>
 				</div>
 				
 				<div className="topRight">
@@ -77,7 +124,7 @@ function App() {
 					</div>
 					<div className="contentRight">
 						<h1>Tarefas pessoais</h1>
-						<p>A <b>{nome}</b> é capaz de realizar todas as tarefas pessoais imagináveis. Seu núcleo está repleto de funções e mais de 8.459 tarefas gravadas que irão suprir suas necessidades.</p>
+						<p>A <b>{nomeCadeira}</b> é capaz de realizar todas as tarefas pessoais imagináveis. Seu núcleo está repleto de funções e mais de 8.459 tarefas gravadas que irão suprir suas necessidades.</p>
 					</div>
 					
 				</div>
@@ -86,7 +133,7 @@ function App() {
 					
 					<div className="contentRight">
 						<h1>Tarefas profissionais</h1>
-						<p>Com a <b>{nome}</b> você nunca mais irá precisar se preparar profundamente para aquela palestra importantíssima na sua empresa. Do Jr até o CEO, 2678 cargos conhecidos e utilizados em todo o mundo.</p>
+						<p>Com a <b>{nomeCadeira}</b> você nunca mais irá precisar se preparar profundamente para aquela palestra importantíssima na sua empresa. Do Jr até o CEO, 2678 cargos conhecidos e utilizados em todo o mundo.</p>
 					</div>
 					<div className="contentLeft">
 						<div className="apresentando"></div>
@@ -118,7 +165,7 @@ function App() {
 					
 					<div className="customization">
 						
-						<p>A <b>{nome}</b> tem 3 padrões de cores iniciais:</p>
+						<p>A <b>{nomeCadeira}</b> tem 3 padrões de cores iniciais:</p>
 						
 						<div className="custom" onClick={() => { changeThemes('0', '0', '0', '0') }}>
 							<span>Sono Profundo</span>
@@ -181,16 +228,7 @@ function App() {
 			
 			<div className="footer">
 				
-				<h1>Vai ficar de fora dessa?</h1>
-				<h2>Cadastre o seu email para ficar sabendo quando a <b>{nome}</b> estará disponível!</h2>
-				
-				<div className="newsLetter">
-					
-					<input type="text" placeholder="Nome"></input>
-					<input type="email" placeholder="Email"></input>
-					<div className="button">CADASTRAR</div>
-					
-				</div>
+				{ registered ? <Registrado/> : <NaoRegistrado/> }
 				
 			</div>
 			
